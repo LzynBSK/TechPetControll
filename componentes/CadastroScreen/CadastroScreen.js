@@ -1,15 +1,62 @@
+// import React, { FC, ReactElement, useState } from "react";
+// import { Alert, TouchableOpacity, SafeAreaView, Text, StyleSheet, TextInput } from "react-native";
+// import Parse from "parse/react-native";
+
+// export const CadastroScreen = () => {
+//   const [email, setEmail] = useState('');
+//   const [username, setUsername] = useState('');
+//   const [password, setPassword] = useState('');
+
+//   const handleCadastro = async function () {
+//     // Note that these values come from state variables that we've declared before
+//     const emailValue = email;
+//     const usernameValue = username;
+//     const passwordValue = password;
+//     // Since the signUp method returns a Promise, we need to call it using await
+//     return await Parse.User.signUp(emailValue, usernameValue, passwordValue)
+//       .then((createdUser) => {
+//         // Parse.User.signUp returns the already created ParseUser object if successful
+//         Alert.alert(
+//           "Sucesso!",
+//           `O usuário ${createdUser.get("username")} foi criado com sucesso!`
+          
+//         );
+//         navigation.replace('Login');
+//         return true;
+//       })
+//       .catch((error) => {
+//         // signUp can fail if any parameter is blank or failed an uniqueness check on the server
+//         Alert.alert("Error!", error.message);
+//         return false;
+//       });
+//   };
 import React, { useState } from 'react';
 import { TextInput, Text, View, TouchableOpacity, SafeAreaView, StyleSheet } from 'react-native';
+import { Parse } from 'parse/react-native';
 
 const CadastroScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [userIdCounter, setUserIdCounter] = useState(1); // Inicializa o contador de IDs únicos
 
-  const handleCadastro = () => {
-    // Implementar a lógica de cadastro aqui
-    // Você pode adicionar código para enviar os dados de cadastro para um servidor, por exemplo
+  const handleCadastro = async () => {
+    const userId = userIdCounter.toString(); // Usa o valor atual do contador como ID único
+
+    const user = new Parse.User();
+    user.set('username', username);
+    user.set('password', password);
+    user.set('email', email);
+    user.set('userId', userId);
+
+    try {
+      await user.signUp();
+      navigation.replace('Login');
+    } catch (error) {
+      console.error('Erro ao cadastrar:', error);
+    }
   };
+  
 
   return (
     <SafeAreaView style={styles.container}>
@@ -36,6 +83,8 @@ const CadastroScreen = ({ navigation }) => {
       <TouchableOpacity style={styles.enterButton} onPress={handleCadastro}>
         <Text>Cadastrar</Text>
       </TouchableOpacity>
+
+      
     </SafeAreaView>
   );
 };
