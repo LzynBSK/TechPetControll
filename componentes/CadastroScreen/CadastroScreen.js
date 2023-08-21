@@ -1,80 +1,60 @@
-// import React, { FC, ReactElement, useState } from "react";
-// import { Alert, TouchableOpacity, SafeAreaView, Text, StyleSheet, TextInput } from "react-native";
-// import Parse from "parse/react-native";
 
-// export const CadastroScreen = () => {
-//   const [email, setEmail] = useState('');
-//   const [username, setUsername] = useState('');
-//   const [password, setPassword] = useState('');
-
-//   const handleCadastro = async function () {
-//     // Note that these values come from state variables that we've declared before
-//     const emailValue = email;
-//     const usernameValue = username;
-//     const passwordValue = password;
-//     // Since the signUp method returns a Promise, we need to call it using await
-//     return await Parse.User.signUp(emailValue, usernameValue, passwordValue)
-//       .then((createdUser) => {
-//         // Parse.User.signUp returns the already created ParseUser object if successful
-//         Alert.alert(
-//           "Sucesso!",
-//           `O usuário ${createdUser.get("username")} foi criado com sucesso!`
-          
-//         );
-//         navigation.replace('Login');
-//         return true;
-//       })
-//       .catch((error) => {
-//         // signUp can fail if any parameter is blank or failed an uniqueness check on the server
-//         Alert.alert("Error!", error.message);
-//         return false;
-//       });
-//   };
+import { v4 as uuidv4 } from 'uuid';
+import 'react-native-get-random-values';
+import Parse from 'parse/react-native';
 import React, { useState } from 'react';
-import { TextInput, Text, View, TouchableOpacity, SafeAreaView, StyleSheet } from 'react-native';
-import { Parse } from 'parse/react-native';
+import { Text, TextInput, TouchableOpacity, SafeAreaView, StyleSheet } from 'react-native';
+import styles from './estilo';
+import { CommonActions } from '@react-navigation/native';
+
 
 const CadastroScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [userIdCounter, setUserIdCounter] = useState(1); // Inicializa o contador de IDs únicos
 
   const handleCadastro = async () => {
-    const userId = userIdCounter.toString(); // Usa o valor atual do contador como ID único
-
-    const user = new Parse.User();
-    user.set('username', username);
-    user.set('password', password);
-    user.set('email', email);
-    user.set('userId', userId);
-
-    try {
-      await user.signUp();
-      navigation.replace('Login');
-    } catch (error) {
-      console.error('Erro ao cadastrar:', error);
-    }
-  };
-  
-
+        try {
+          const userId = uuidv4();
+          
+          const user = new Parse.User();
+          user.set('username', username);
+          user.set('password', password);
+          user.set('email', email);
+          user.set('userId', userId);
+      
+          await user.signUp();
+          navigation.navigate('Login');
+          navigation.dispatch(
+            CommonActions.reset({
+              index: 0, // O índice da rota que você quer manter (no caso, a primeira rota)
+              routes: [{ name: 'Home' }] // As rotas que você quer manter na pilha após o reset
+            })
+          );
+        } catch (error) {
+          console.error('Erro ao cadastrar:', error);
+          console.log('Error message:', error.message);
+          console.log('Error code:', error.code);
+          console.log('Error details:', error.details);
+        }
+      };
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.txtCadastro}>Cadastro de Usuário</Text>
       <TextInput
-        style={styles.input}
+        style={styles.input1}
         placeholder="Email"
         value={email}
         onChangeText={setEmail}
       />
       <TextInput
-        style={styles.input}
+        style={styles.input2}
         placeholder="Nome de usuário"
         value={username}
         onChangeText={setUsername}
       />
       <TextInput
-        style={styles.input}
+        style={styles.input3}
         placeholder="Senha"
         value={password}
         onChangeText={setPassword}
@@ -83,45 +63,14 @@ const CadastroScreen = ({ navigation }) => {
       <TouchableOpacity style={styles.enterButton} onPress={handleCadastro}>
         <Text>Cadastrar</Text>
       </TouchableOpacity>
-
       
+      <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+        <Text style={styles.linkText}>Já tem uma conta? </Text>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  txtCadastro: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  input: {
-    height: 40,
-    marginLeft: 7,
-    marginRight: 7,
-    borderWidth: 1,
-    borderColor: "#813BF5",
-    borderRadius: 10,
-    padding: 10,
-    width: '90%',
-    marginBottom: 10,
-  },
-  enterButton: {
-    height: 35,
-    marginTop: 10,
-    marginLeft: 7,
-    marginRight: 7,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#AB76FA',
-    borderRadius: 10,
-    width: '90%',
-  },
-});
+
 
 export default CadastroScreen;

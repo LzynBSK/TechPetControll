@@ -1,150 +1,100 @@
-// // src/screens/LoginScreen.js
-// import React, { useState } from 'react';
-// import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+// import React, { useState, useEffect } from 'react';
+// import { Text, TextInput, TouchableOpacity, SafeAreaView, StyleSheet } from 'react-native';
+// import Parse from 'parse/react-native';
+// import AsyncStorage from '@react-native-async-storage/async-storage'; // Importe o AsyncStorage
+
+// import styles from './estilo';
 
 // const LoginScreen = ({ navigation }) => {
 //   const [username, setUsername] = useState('');
 //   const [password, setPassword] = useState('');
 
-//   const handleLogin = () => {
-//     // Implementar a lógica de autenticação aqui
-//     // Por simplicidade, vamos apenas redirecionar para a tela principal sem autenticação
-//     navigation.replace('Home');
+//   const handleLogin = async () => {
+//     try {
+//       const user = await Parse.User.logIn(username, password);
+//       if (user) {
+//         // Atualize o estado de usuário logado usando AsyncStorage
+//         await AsyncStorage.setItem('userLoggedIn', 'true');
+//         navigation.replace('Home'); // Redirecionar para a tela principal após o login bem-sucedido
+//       }
+//     } catch (error) {
+//       console.error('Erro ao fazer login:', error);
+//     }
 //   };
 
 //   return (
-//     <View style={styles.container}>
-//       <Text style={styles.title}>Login</Text>
+//     <SafeAreaView style={styles.container}>
+//       <Text style={styles.txtCadastro}>Login</Text>
 //       <TextInput
-//         placeholder="Nome de usuário"
-//         onChangeText={text => setUsername(text)}
+//         style={styles.input1}
+//         placeholder="Usuário"
 //         value={username}
-//         style={styles.input}
+//         onChangeText={setUsername}
 //       />
 //       <TextInput
+//         style={styles.input2}
 //         placeholder="Senha"
-//         onChangeText={text => setPassword(text)}
 //         value={password}
-//         secureTextEntry
-//         style={styles.input}
+//         onChangeText={setPassword}
+//         secureTextEntry={true}
 //       />
-//       <Button title="Entrar" onPress={handleLogin} />
-//     </View>
+//       <TouchableOpacity style={styles.enterButton} onPress={handleLogin}>
+//         <Text>Entrar</Text>
+//       </TouchableOpacity>
+//     </SafeAreaView>
 //   );
 // };
 
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//   },
-//   title: {
-//     fontSize: 24,
-//     marginBottom: 16,
-//   },
-//   input: {
-//     width: '80%',
-//     height: 40,
-//     borderWidth: 1,
-//     marginBottom: 12,
-//     paddingLeft: 8,
-//   },
-// });
-
 // export default LoginScreen;
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, SafeAreaView, StyleSheet } from 'react-native';
+import Parse from 'parse/react-native';
+import ShakingInput from './ShakingInput'; // Importe o componente ShakingInput
+import styles from './estilo';
 
-import React, { useState, useLayoutEffect } from 'react';
-import { TextInput, Text, View, Button, SafeAreaView, StyleSheet, onChangeText, TouchableOpacity } from 'react-native';
+const LoginScreen = ({ navigation }) => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [loginError, setLoginError] = useState(false); // Estado de erro
 
-import estilo from './estilo';
+  const handleLogin = async () => {
+    try {
+      const user = await Parse.User.logIn(username, password);
+      if (user) {
+        // Atualize o estado de usuário logado usando AsyncStorage
+        await AsyncStorage.setItem('userLoggedIn', 'true');
+        navigation.replace('Home'); // Redirecionar para a tela principal após o login bem-sucedido
+      }
+    } catch (error) {
+      console.error('Erro ao fazer login:', error);
+      setLoginError(true); // Ativar o estado de erro
+    }
+  };
 
-// export default function Home (props) {
-//   return (
-  export default function LoginScreen (props) {
-    const [username, setUsername] = useState('')
-    ;
-    const [password, setPassword] = useState('');
-      
-
-    const handleLogin = () => {
-      // lógica de login aqui
-    };
-    
-
-
-    return (
+  return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.txtCadastro}>
-      Nome do Usuário
-      </Text>
-      <TextInput
-        style={styles.input1}
+      <Text style={styles.txtCadastro}>Login</Text>
+      <ShakingInput
+        inputStyle={styles.input1} // Passe o estilo de input personalizado
+        style={loginError ? styles.inputError : null} // Estilo condicional de erro
         placeholder="Usuário"
         value={username}
         onChangeText={setUsername}
       />
-      <TextInput
-        style={styles.input2}
+      <ShakingInput
+        inputStyle={styles.input2} // Passe o estilo de input personalizado
+        style={loginError ? styles.inputError : null} // Estilo condicional de erro
         placeholder="Senha"
         value={password}
         onChangeText={setPassword}
         secureTextEntry={true}
+        isError={loginError}
       />
-      <TouchableOpacity style={styles.enterButton}>
-    <Text>Entrar </Text>
-</TouchableOpacity>
+      <TouchableOpacity style={styles.enterButton} onPress={handleLogin}>
+        <Text>Entrar</Text>
+      </TouchableOpacity>
     </SafeAreaView>
-
-
-);
+  );
 };
-const styles = StyleSheet.create({
-  input1: {
-    height: 40,
-    marginLeft: 7,
-    marginRight: 7,
-    borderWidth: 1,
-    borderColor: "#813BF5",
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
-    padding: 10,
-    width: '90%'
-  },
-  input2: {
-    height: 40,
-    marginTop: -1,
-    marginLeft: 7,
-    marginRight: 7,
-    borderWidth: 1,
-    borderColor: "#813BF5",
-    borderBottomLeftRadius: 10,
-    borderBottomRightRadius: 10,
-    padding: 10,
-    width: '90%'
-  },
 
-  container:{
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center"
-  },
-  txtCadastro:{
-    fontSize: 16,
-    fontWeight: 'bold',
-    alignSelf: "center",
-    marginBottom: 10
-  },
-  enterButton:{
-    height: 35, 
-    marginTop: 5,
-    marginLeft: 7,
-    marginRight: 7,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor:'#AB76FA',
-    borderRadius: 10,
-    width: 379,
-    width: '90%'
-  }
-});
+export default LoginScreen;
