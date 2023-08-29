@@ -49,26 +49,26 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, SafeAreaView, StyleSheet, Alert } from 'react-native';
 import Parse from 'parse/react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
- // Importe o AsyncStorage
-import ShakingInput from './ShakingInput'; // Importe o componente ShakingInput
+
+import ShakingInput from './ShakingInput';
 import styles from './estilo';
 
 const LoginScreen = ({ navigation }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [loginError, setLoginError] = useState(false); // Estado de erro
+  const [loginError, setLoginError] = useState(false); 
 
   const handleLogin = async () => {
     try {
       const user = await Parse.User.logIn(username, password);
       if (user) {
-        // Atualize o estado de usuário logado usando AsyncStorage
+       
         await AsyncStorage.setItem('userLoggedIn', 'true');
-        navigation.replace('Home'); // Redirecionar para a tela principal após o login bem-sucedido
+        navigation.replace('Home');
       }
     } catch (error) {
       console.error('Erro ao fazer login:', error);
-      setLoginError(true); // Ativar o estado de erro
+      setLoginError(true);
     }
   };
 
@@ -76,15 +76,15 @@ const LoginScreen = ({ navigation }) => {
     <SafeAreaView style={styles.container}>
       <Text style={styles.txtCadastro}>Login</Text>
       <ShakingInput
-        inputStyle={styles.input1} // Passe o estilo de input personalizado
-        style={loginError ? styles.inputError : null} // Estilo condicional de erro
+        inputStyle={styles.input1}
+        style={loginError ? styles.inputError : null} 
         placeholder="Usuário"
         value={username}
         onChangeText={setUsername}
       />
       <ShakingInput
-        inputStyle={styles.input2} // Passe o estilo de input personalizado
-        style={loginError ? styles.inputError : null} // Estilo condicional de erro
+        inputStyle={styles.input2} 
+        style={loginError ? styles.inputError : null} 
         placeholder="Senha"
         value={password}
         onChangeText={setPassword}

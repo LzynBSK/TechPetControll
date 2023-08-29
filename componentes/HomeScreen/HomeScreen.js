@@ -11,7 +11,6 @@ const HomeScreen = () => {
       const connected = await WifiManager.connectToProtectedSSID(ssid, password, false);
       if (connected) {
         console.log('Conectado ao ESP32 via Wi-Fi');
-        // Implementar a lógica para enviar comandos e receber dados para controlar o ESP32
       } else {
         console.log('Falha ao conectar ao ESP32');
       }
@@ -55,14 +54,14 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     alignSelf: 'center',
     marginBottom: 10,
-    color: '#009E67', // Nova cor do tema
+    color: '#009E67',
   },
   input1: {
     height: 40,
     marginLeft: 7,
     marginRight: 7,
     borderWidth: 1,
-    borderColor: '#009E67', // Nova cor do tema
+    borderColor: '#009E67',
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
     padding: 10,
@@ -76,7 +75,7 @@ const styles = StyleSheet.create({
     marginLeft: 7,
     marginRight: 7,
     borderWidth: 1,
-    borderColor: '#009E67', // Nova cor do tema
+    borderColor: '#009E67',
     borderBottomLeftRadius: 10,
     borderBottomRightRadius: 10,
     padding: 10,
@@ -84,7 +83,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   button: {
-    backgroundColor: '#009E67', // Nova cor do tema
+    backgroundColor: '#009E67', 
     borderRadius: 10,
     paddingVertical: 10,
     paddingHorizontal: 20,

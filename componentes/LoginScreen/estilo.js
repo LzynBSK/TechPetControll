@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
     padding: 10,
-    width: 330,
+    width: "100%",
     marginBottom: 5,
   },
   input2: {
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 10,
     borderBottomRightRadius: 10,
     padding: 10,
-    width: 330,
+    width: "100%",
     marginBottom: 10,
   },
   container: {

@@ -7,30 +7,26 @@ import LoginScreen from './componentes/LoginScreen/LoginScreen';
 import CadastroScreen from './componentes/CadastroScreen/CadastroScreen';
 import HomeScreen from './componentes/HomeScreen/HomeScreen';
 import DrawerContent from './componentes/DrawerContent/DrawerContent';
-import { Parse } from 'parse/react-native';
+import Parse from "parse/react-native.js";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import AulaScreen from './componentes/AulaScreen/AulaScreen';
 
-Parse.setAsyncStorage(AsyncStorage);
+// Inicialize o Parse após importar o AsyncStorage
 Parse.initialize('c0LHkbk3waILSqO3K76twbzlSoOtcrcTJvgjJf8m', 'T3MDD7j3GgOKV6haJZKWCYru1gxZujnKv9Mbkzpp');
 Parse.serverURL = 'https://parseapi.back4app.com/';
+Parse.setAsyncStorage(AsyncStorage);
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
-const TelasStack = () => {
-  return (
-    <Stack.Navigator initialRouteName="Cadastro" screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Cadastro" component={CadastroScreen} />
-      <Stack.Screen name="Login" component={LoginScreen} />
-      <Drawer.Screen name="Home" component={HomeScreen} />
-    </Stack.Navigator>
-  );
-};
 
 const TelasDrawer = () => {
   return (
     <Drawer.Navigator drawerContent={(props) => <DrawerContent {...props} />}>
+      <Drawer.Screen name="Cadastro" component={CadastroScreen} />
+      <Drawer.Screen name="Login" component={LoginScreen} />
       <Drawer.Screen name="Home" component={HomeScreen} />
+      <Drawer.Screen name="Aula" component={AulaScreen} />
     </Drawer.Navigator>
   );
 };
@@ -56,7 +52,7 @@ const App = () => {
 
   return (
     <NavigationContainer key={key}>
-      {userLoggedIn ? <TelasDrawer /> : <TelasStack />}
+      <TelasDrawer />
     </NavigationContainer>
   );
 };

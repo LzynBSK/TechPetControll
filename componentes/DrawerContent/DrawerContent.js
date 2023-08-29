@@ -3,16 +3,16 @@ import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import styles from './styles'; // Importe seus estilos aqui
+import styles from './styles'; 
 
 
 
-const DrawerContent = (props) => {
-  console.log(props);
+const DrawerContent = ({navigation}) => {
+  console.log(navigation);
   const handleLogout = async () => {
-    // Lógica de logout aqui
+   
     await AsyncStorage.removeItem('userLoggedIn');
-    props.navigation.replace('Cadastro');
+    navigation.replace('Cadastro');
   };
 
   return (
