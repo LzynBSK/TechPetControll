@@ -17,22 +17,30 @@ Parse.serverURL = 'https://parseapi.back4app.com/';
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
-const MainStack = () => {
+const TelasStack = () => {
   return (
     <Stack.Navigator initialRouteName="Cadastro" screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Cadastro" component={CadastroScreen} />
-      <Stack.Screen name="Login" component={LoginScreen} screenOptions={{ headerShown: false}}/>
-      <Stack.Screen name="Home" component={HomeScreen} />
+      <Stack.Screen name="Login" component={LoginScreen} />
+      <Drawer.Screen name="Home" component={HomeScreen} />
     </Stack.Navigator>
   );
 };
 
+const TelasDrawer = () => {
+  return (
+    <Drawer.Navigator drawerContent={(props) => <DrawerContent {...props} />}>
+      <Drawer.Screen name="Home" component={HomeScreen} />
+    </Drawer.Navigator>
+  );
+};
 
 const App = () => {
   const [userLoggedIn, setUserLoggedIn] = useState(false);
+  const [key, setKey] = useState(0); // Adicionar uma chave de re-renderização
 
   useEffect(() => {
-    // Verificar o estado de registro e login do usuário usando AsyncStorage
+    // Verificar o estado de login do usuário usando AsyncStorage
     const checkUserStatus = async () => {
       const isLoggedIn = await AsyncStorage.getItem('userLoggedIn');
       setUserLoggedIn(isLoggedIn === 'true');
@@ -41,15 +49,14 @@ const App = () => {
     checkUserStatus();
   }, []);
 
+  useEffect(() => {
+    // Atualizar a chave para forçar a re-renderização
+    setKey(key + 1);
+  }, [userLoggedIn]);
+
   return (
-    <NavigationContainer>
-      {userLoggedIn ? (
-        <Drawer.Navigator drawerContent={(props) => <DrawerContent {...props} />}>
-          <Drawer.Screen name="Home" component={HomeScreen} />
-        </Drawer.Navigator>
-      ) : (
-        <MainStack />
-      )}
+    <NavigationContainer key={key}>
+      {userLoggedIn ? <TelasDrawer /> : <TelasStack />}
     </NavigationContainer>
   );
 };

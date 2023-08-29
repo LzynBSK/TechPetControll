@@ -5,7 +5,10 @@ import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawe
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from './styles'; // Importe seus estilos aqui
 
+
+
 const DrawerContent = (props) => {
+  console.log(props);
   const handleLogout = async () => {
     // Lógica de logout aqui
     await AsyncStorage.removeItem('userLoggedIn');

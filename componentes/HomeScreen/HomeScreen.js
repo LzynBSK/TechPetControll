@@ -39,6 +39,7 @@ const HomeScreen = () => {
       <TouchableOpacity style={styles.button} onPress={connectToEsp32}>
         <Text style={styles.buttonText}>Conectar ao ESP32</Text>
       </TouchableOpacity>
+      
     </View>
   );
 };

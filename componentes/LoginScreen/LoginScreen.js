@@ -45,10 +45,11 @@
 //   );
 // };
 
-// export default LoginScreen;
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, SafeAreaView, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, SafeAreaView, StyleSheet, Alert } from 'react-native';
 import Parse from 'parse/react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+ // Importe o AsyncStorage
 import ShakingInput from './ShakingInput'; // Importe o componente ShakingInput
 import styles from './estilo';
 

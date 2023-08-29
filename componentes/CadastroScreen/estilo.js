@@ -41,6 +41,7 @@ const styles = StyleSheet.create({
       padding: 10,
       width: '90%',
       marginBottom: 10,
+      
     },
     container: {
       flex: 1,
@@ -52,7 +53,9 @@ const styles = StyleSheet.create({
       fontSize: 16,
       fontWeight: 'bold',
       marginBottom: 10,
-      color:"#009E67"
+      color:"#009E67",
+      
+      
     },
     enterButton: {
       height: 35,
@@ -64,12 +67,18 @@ const styles = StyleSheet.create({
       backgroundColor: '#009E67', // Nova cor do tema
       borderRadius: 10,
       width: '90%',
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 0 }, // Ajuste o valor aqui
+      shadowOpacity: 0.25,
+      shadowRadius: 3.84,
+      elevation: 5,
     },
     linkText: {
       marginTop: 20,
       color: '#009E67', // Nova cor do tema
       fontSize: 12,
       fontWeight: 'bold',
+      
     },
   });
 
