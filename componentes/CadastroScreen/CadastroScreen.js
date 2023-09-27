@@ -1,37 +1,53 @@
-import { v4 as uuidv4 } from 'uuid';
-import 'react-native-get-random-values';
-import Parse from 'parse/react-native';
 import React, { useState } from 'react';
-import { Text, TextInput, TouchableOpacity, SafeAreaView, StyleSheet, Alert } from 'react-native';
+import { Text, TextInput, TouchableOpacity, SafeAreaView, StyleSheet, View } from 'react-native';
 import styles from './estilo';
-import { CommonActions } from '@react-navigation/native';
 import CustomModal from './CustomModal';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const CadastroScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [isSuccessModalVisible, setIsSuccessModalVisible] = useState(false);
+
+  // Estados para controlar a visibilidade dos modais de erro
+  const [isUsernameErrorVisible, setIsUsernameErrorVisible] = useState(false);
+  const [isEmailErrorVisible, setIsEmailErrorVisible] = useState(false);
+
   const handleCadastro = async () => {
     try {
+      // Validações
+      if (username.length < 3) {
+        setIsUsernameErrorVisible(true); // Exibe o modal de erro de nome de usuário curto
+        return;
+      }
+      if (!/^[a-zA-Z0-9]+$/.test(username)) {
+        setIsUsernameErrorVisible(true); // Exibe o modal de erro de nome de usuário com caracteres especiais
+        return;
+      }
+      if (
+        !/^(?:[a-zA-Z0-9._-]+@(?:gmail|yahoo|outlook|hotmail|icloud|aol|protonmail|zoho|yandex|gmx|mail|tutanota|fastmail)\.com)$/.test(email)
+      ) {
+        setIsEmailErrorVisible(true); // Exibe o modal de erro de email inválido
+        return;
+      }
+      
       const userId = uuidv4();
-          
       const user = new Parse.User();
       user.set('username', username);
       user.set('password', password);
       user.set('email', email);
       user.set('userId', userId);
-          
+
       await user.signUp();
       setIsSuccessModalVisible(true);
     } catch (error) {
       console.error('Erro ao cadastrar:', error);
-      console.log('Error message:', error.message);
-      console.log('Error code:', error.code);
-      console.log('Error details:', error.details);
+
+      // Mostrar a mensagem de erro no modal
+      setErrorMessage(error.message);
+      setIsErrorModalVisible(true);
     }
   };
+
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.txtCadastro}>Cadastro de Usuário</Text>
@@ -62,20 +78,27 @@ const CadastroScreen = ({ navigation }) => {
       <TouchableOpacity onPress={() => navigation.navigate('Login')}>
         <Text style={styles.linkText}>Já tem uma conta? </Text>
       </TouchableOpacity>
-      {isSuccessModalVisible && (
+
+      {/* Modais de Erro Personalizados */}
+      {isUsernameErrorVisible && (
         <CustomModal
-          visible={isSuccessModalVisible}
-          onClose={() => {
-            setIsSuccessModalVisible(false);
-            navigation.navigate('Login');
-          }}
-          username={username}
-        />
+          visible={isUsernameErrorVisible}
+          onClose={() => setIsUsernameErrorVisible(false)}
+        >
+          <Text>Nome de usuário inválido. Ele deve ter pelo menos 3 caracteres e não deve conter caracteres especiais.</Text>
+        </CustomModal>
+      )}
+
+      {isEmailErrorVisible && (
+        <CustomModal
+          visible={isEmailErrorVisible}
+          onClose={() => setIsEmailErrorVisible(false)}
+        >
+          <Text>Email inválido. O email deve ser válido e pertencer a um dos provedores suportados.</Text>
+        </CustomModal>
       )}
     </SafeAreaView>
   );
 };
-
-
 
 export default CadastroScreen;

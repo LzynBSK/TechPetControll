@@ -46,7 +46,7 @@
 // };
 
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, SafeAreaView, StyleSheet, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, SafeAreaView, StyleSheet, TextInput, Alert } from 'react-native';
 import Parse from 'parse/react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
  // Importe o AsyncStorage
@@ -74,22 +74,19 @@ const LoginScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.txtCadastro}>Login</Text>
-      <ShakingInput
-        inputStyle={styles.input1} // Passe o estilo de input personalizado
-        style={loginError ? styles.inputError : null} // Estilo condicional de erro
+<Text style={styles.txtCadastro}>Login</Text>
+        <TextInput
+        style={styles.input1}
         placeholder="Usuário"
         value={username}
         onChangeText={setUsername}
       />
-      <ShakingInput
-        inputStyle={styles.input2} // Passe o estilo de input personalizado
-        style={loginError ? styles.inputError : null} // Estilo condicional de erro
+      <TextInput
+        style={styles.input2}
         placeholder="Senha"
         value={password}
         onChangeText={setPassword}
         secureTextEntry={true}
-        isError={loginError}
       />
       <TouchableOpacity style={styles.enterButton} onPress={handleLogin}>
         <Text>Entrar</Text>

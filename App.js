@@ -40,20 +40,20 @@ const App = () => {
   const [key, setKey] = useState(0); // Adicionar uma chave de re-renderização
 
   useEffect(() => {
-    // Verificar o estado de login do usuário usando AsyncStorage
+    // Verificar se o usuário já se cadastrou usando AsyncStorage
     const checkUserStatus = async () => {
-      const isLoggedIn = await AsyncStorage.getItem('userLoggedIn');
-      setUserLoggedIn(isLoggedIn === 'true');
+      const hasRegistered = await AsyncStorage.getItem('hasRegistered');
+      setUserLoggedIn(hasRegistered === 'true');
     };
-
+  
     checkUserStatus();
   }, []);
-
+  
   useEffect(() => {
     // Atualizar a chave para forçar a re-renderização
     setKey(key + 1);
   }, [userLoggedIn]);
-
+  
   return (
     <NavigationContainer key={key}>
       {userLoggedIn ? <TelasDrawer /> : <TelasStack />}
