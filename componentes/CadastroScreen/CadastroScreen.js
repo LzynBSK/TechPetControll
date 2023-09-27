@@ -8,9 +8,10 @@ const CadastroScreen = ({ navigation }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  // Estados para controlar a visibilidade dos modais de erro
+  // Estados para controlar a visibilidade dos modais de erro e sucesso
   const [isUsernameErrorVisible, setIsUsernameErrorVisible] = useState(false);
   const [isEmailErrorVisible, setIsEmailErrorVisible] = useState(false);
+  const [isSuccessModalVisible, setIsSuccessModalVisible] = useState(false); // Adicionado
 
   const handleCadastro = async () => {
     try {
@@ -84,18 +85,31 @@ const CadastroScreen = ({ navigation }) => {
         <CustomModal
           visible={isUsernameErrorVisible}
           onClose={() => setIsUsernameErrorVisible(false)}
-        >
-          <Text>Nome de usuário inválido. Ele deve ter pelo menos 3 caracteres e não deve conter caracteres especiais.</Text>
-        </CustomModal>
+          title="Erro de Nome de Usuário"
+          message="Nome de usuário inválido. Ele deve ter pelo menos 3 caracteres e não deve conter caracteres especiais."
+        />
       )}
 
       {isEmailErrorVisible && (
         <CustomModal
           visible={isEmailErrorVisible}
           onClose={() => setIsEmailErrorVisible(false)}
-        >
-          <Text>Email inválido. O email deve ser válido e pertencer a um dos provedores suportados.</Text>
-        </CustomModal>
+          title="Erro de Email"
+          message="Email inválido. O email deve ser válido e pertencer a um dos provedores suportados."
+        />
+      )}
+
+      {/* Modal de Sucesso */}
+      {isSuccessModalVisible && (
+        <CustomModal
+          visible={isSuccessModalVisible}
+          onClose={() => {
+            setIsSuccessModalVisible(false);
+            navigation.navigate('Login');
+          }}
+          title="Sucesso"
+          message={`Seja bem-vindo, ${username}! Sua conta foi criada com sucesso!`}
+        />
       )}
     </SafeAreaView>
   );
