@@ -3,8 +3,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
-import LoginScreen from './componentes/LoginScreen/LoginScreen';
-import CadastroScreen from './componentes/CadastroScreen/CadastroScreen';
+import Login from './componentes/LoginScreen/LoginScreen';
+import Cadastro from './componentes/CadastroScreen/CadastroScreen';
 import HomeScreen from './componentes/HomeScreen/HomeScreen';
 import DrawerContent from './componentes/DrawerContent/DrawerContent';
 import { Parse } from 'parse/react-native';
@@ -19,10 +19,8 @@ const Drawer = createDrawerNavigator();
 
 const TelasStack = () => {
   return (
-    <Stack.Navigator initialRouteName="Cadastro" screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Cadastro" component={CadastroScreen} />
-      <Stack.Screen name="Login" component={LoginScreen} />
-      <Drawer.Screen name="Home" component={HomeScreen} />
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="Login" component={Login} />
     </Stack.Navigator>
   );
 };
@@ -36,27 +34,12 @@ const TelasDrawer = () => {
 };
 
 const App = () => {
-  const [userLoggedIn, setUserLoggedIn] = useState(false);
-  const [key, setKey] = useState(0); // Adicionar uma chave de re-renderização
-
-  useEffect(() => {
-    // Verificar se o usuário já se cadastrou usando AsyncStorage
-    const checkUserStatus = async () => {
-      const hasRegistered = await AsyncStorage.getItem('hasRegistered');
-      setUserLoggedIn(hasRegistered === 'true');
-    };
-  
-    checkUserStatus();
-  }, []);
-  
-  useEffect(() => {
-    // Atualizar a chave para forçar a re-renderização
-    setKey(key + 1);
-  }, [userLoggedIn]);
-  
   return (
-    <NavigationContainer key={key}>
-      {userLoggedIn ? <TelasDrawer /> : <TelasStack />}
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Cadastro" screenOptions={{headerShown: false}}>
+        <Stack.Screen name="Cadastro" component={Cadastro} />
+        <Stack.Screen name="Login" component={Login} />
+      </Stack.Navigator>
     </NavigationContainer>
   );
 };
