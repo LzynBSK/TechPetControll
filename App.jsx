@@ -9,6 +9,8 @@ import HomeScreen from './componentes/HomeScreen/HomeScreen';
 import DrawerContent from './componentes/DrawerContent/DrawerContent';
 import { Parse } from 'parse/react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Controle from './componentes/Comedouros/Controle/index'
+import ComedouroList from './componentes/Comedouros/Lista';
 
 Parse.setAsyncStorage(AsyncStorage);
 Parse.initialize('c0LHkbk3waILSqO3K76twbzlSoOtcrcTJvgjJf8m', 'T3MDD7j3GgOKV6haJZKWCYru1gxZujnKv9Mbkzpp');
@@ -27,19 +29,19 @@ const TelasStack = () => {
 
 const TelasDrawer = () => {
   return (
-    <Drawer.Navigator drawerContent={(props) => <DrawerContent {...props} />}>
-      <Drawer.Screen name="Home" component={HomeScreen} />
-    </Drawer.Navigator>
+    <Drawer.Navigator initialRouteName="Cadastro">
+        <Drawer.Screen name="Cadastro" component={Cadastro} />
+        <Drawer.Screen name="Login" component={Login} />
+        <Drawer.Screen name="Controle" component={Controle} />
+        <Drawer.Screen name="Lista" component={ComedouroList} />
+      </Drawer.Navigator>
   );
 };
 
 const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Cadastro" screenOptions={{headerShown: false}}>
-        <Stack.Screen name="Cadastro" component={Cadastro} />
-        <Stack.Screen name="Login" component={Login} />
-      </Stack.Navigator>
+      <TelasDrawer/>
     </NavigationContainer>
   );
 };
