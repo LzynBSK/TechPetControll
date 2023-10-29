@@ -45,13 +45,14 @@
 //   );
 // };
 
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, Text, TouchableOpacity, SafeAreaView, StyleSheet, TextInput, Alert } from 'react-native';
 import Parse from 'parse/react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
  // Importe o AsyncStorage
 import ShakingInput from './ShakingInput'; // Importe o componente ShakingInput
 import styles from './estilo';
+import { UserContext } from "../../App"
 
 const Login = ({ navigation }) => {
   const [username, setUsername] = useState('');
@@ -61,14 +62,10 @@ const Login = ({ navigation }) => {
   const handleLogin = async () => {
     try {
       const user = await Parse.User.logIn(username, password);
-      if (user) {
-        // Atualize o estado de usuário logado usando AsyncStorage
-        await AsyncStorage.setItem('userLoggedIn', 'true');
-        navigation.replace('Home'); // Redirecionar para a tela principal após o login bem-sucedido
-      }
+      // Atualiza o usuário em App.js
+      setUser(user);
     } catch (error) {
-      console.error('Erro ao fazer login:', error);
-      setLoginError(true); // Ativar o estado de erro
+      alert("Error!", error.message);
     }
   };
 
