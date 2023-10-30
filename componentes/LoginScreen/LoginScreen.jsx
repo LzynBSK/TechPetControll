@@ -52,12 +52,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
  // Importe o AsyncStorage
 import ShakingInput from './ShakingInput'; // Importe o componente ShakingInput
 import styles from './estilo';
-import { UserContext } from "../../App"
+import { UserContext } from "./UserContext"
 
-const Login = ({ navigation }) => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [loginError, setLoginError] = useState(false); // Estado de erro
+export const Login = () => {
+  const { setUser } = useContext(UserContext);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleLogin = async () => {
     try {

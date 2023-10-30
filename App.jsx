@@ -67,8 +67,8 @@ return (
         ) : (
           // Se o usuário está deslogado, nós mostramos o stack de autenticação
           <>
-            <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="Cadastro" component={Cadastro} />
+            <Stack.Screen name="Login" component={Login} />
           </>
         )}
       </Stack.Navigator>

@@ -35,13 +35,10 @@ const Cadastro = ({ navigation }) => {
           setIsEmailErrorVisible(true); // Exibe o modal de erro de email inválido
           return;
         }
-
-        const userId = uuidv4();
         const user = new Parse.User();
         user.set('username', username);
         user.set('password', password);
         user.set('email', email);
-        user.set('userId', userId);
 
         let userResult = await user.signUp();
         console.log('User signed up', userResult);

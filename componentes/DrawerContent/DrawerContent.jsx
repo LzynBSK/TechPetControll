@@ -6,7 +6,7 @@ import Parse from 'parse/react-native';
 import { Updates } from 'expo';
 import React, { useContext } from "react";
 import { Button } from "react-native";
-import { UserContext } from "../../App"; // ajuste para o path correto
+import { UserContext } from "../LoginScreen/UserContext"; // ajuste para o path correto
 
 export const DrawerContent = () => {
   const { setUser } = useContext(UserContext);
