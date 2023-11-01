@@ -56,6 +56,13 @@ const styles = StyleSheet.create({
   },
   inputError:{
     borderColor:"red",
+  },
+  linkText: {
+    marginTop: 20,
+    color: '#009E67', // Nova cor do tema
+    fontSize: 12,
+    fontWeight: 'bold',
+    
   }
 });
 export default styles;

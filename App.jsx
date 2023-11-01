@@ -13,66 +13,56 @@
   import  AppLoading  from 'expo-app-loading';
   import ComedouroList from './componentes/Comedouros/Lista';
   
-  export const UserContext = React.createContext();
-
-  Parse.setAsyncStorage(AsyncStorage);
-  Parse.initialize('c0LHkbk3waILSqO3K76twbzlSoOtcrcTJvgjJf8m', 'T3MDD7j3GgOKV6haJZKWCYru1gxZujnKv9Mbkzpp');
-  Parse.serverURL = 'https://parseapi.back4app.com/';
-
-  const Stack = createStackNavigator();
-  const Drawer = createDrawerNavigator();
-
-const DrawerContainer = () => {
-    return (
-        <Drawer.Navigator drawerContent={props => <DrawerContent {...props}/>}>
-            <Drawer.Screen name="Home" component={HomeScreen} />
-            <Drawer.Screen name="Controle" component={Controle} />
-            <Drawer.Screen name="Lista" component={ComedouroList} />
-        </Drawer.Navigator>
-    );
-};
-
-export default function App() {
+  export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
   const [user, setUser] = useState(null);
-  
-async function prepareApp() {
-  try {
-    // Keep the splash screen visible while we fetch resources
-    await SplashScreen.preventAutoHideAsync();
+  const [isUserLoaded, setIsUserLoaded] = useState(false);  // definir uma nova variável de estado aqui
 
-    // Preload resources
-    const currentUser = await Parse.User.currentAsync();
-    setUser(currentUser);
-  } catch (e) {
-    console.warn(e);
-  } finally {
-    // Tell the application to render
-    setAppIsReady(true);
-    await SplashScreen.hideAsync();
+  async function prepareApp() {
+    try {
+      // Keep the splash screen visible while we fetch resources
+      await SplashScreen.preventAutoHideAsync();
+
+      // Preload resources
+      const currentUser = await Parse.User.currentAsync();
+      setUser(currentUser);
+      setIsUserLoaded(true); // definir isUserLoaded como true aqui
+    } catch (e) {
+      console.warn(e);
+    } finally {
+      // Tell the application to render
+      setAppIsReady(true);
+      await SplashScreen.hideAsync();
+    }
   }
+
+  useEffect(() => {
+    prepareApp();
+  }, []);
+
+  if (!appIsReady) {
+    return null;
+  }
+
+  return (
+    <UserContext.Provider 
+     value={{ user, setUser, isUserLoaded, setIsUserLoaded }}>
+      <NavigationContainer>
+        {isUserLoaded ? (
+          <Stack.Navigator screenOptions={{headerShown: false}}>
+            {user ? (
+              // Se o usuário está logado, nós mostramos o DrawerNavigator
+              <Stack.Screen name="Drawer" component={DrawerContainer} />
+            ) : (
+              // Se o usuário está deslogado, nós mostramos o stack de autenticação
+              <>
+                <Stack.Screen name="Cadastro">{props => <Cadastro {...props}/>}</Stack.Screen>
+                <Stack.Screen name="Login">{props => <Login {...props}/>}</Stack.Screen>
+              </>
+            )}
+          </Stack.Navigator>
+        ) : null}
+      </NavigationContainer>
+    </UserContext.Provider>
+  );
 }
-
-useEffect(() => {
-  prepareApp();
-}, []);
-
-return (
-  <UserContext.Provider value={{ user, setUser }}>
-    <NavigationContainer>
-      <Stack.Navigator screenOptions={{headerShown: false}}>
-        {user ? (
-          // Se o usuário está logado, nós mostramos o DrawerNavigator
-          <Stack.Screen name="Drawer" component={DrawerContainer} />
-        ) : (
-          // Se o usuário está deslogado, nós mostramos o stack de autenticação
-          <>
-            <Stack.Screen name="Cadastro" component={Cadastro} />
-            <Stack.Screen name="Login" component={Login} />
-          </>
-        )}
-      </Stack.Navigator>
-    </NavigationContainer>
-  </UserContext.Provider>
-);
-};

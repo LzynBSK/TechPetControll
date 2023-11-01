@@ -1,88 +1,32 @@
-// import React, { useState, useEffect } from 'react';
-// import { Text, TextInput, TouchableOpacity, SafeAreaView, StyleSheet } from 'react-native';
-// import Parse from 'parse/react-native';
-// import AsyncStorage from '@react-native-async-storage/async-storage'; // Importe o AsyncStorage
-
-// import styles from './estilo';
-
-// const LoginScreen = ({ navigation }) => {
-//   const [username, setUsername] = useState('');
-//   const [password, setPassword] = useState('');
-
-//   const handleLogin = async () => {
-//     try {
-//       const user = await Parse.User.logIn(username, password);
-//       if (user) {
-//         // Atualize o estado de usuário logado usando AsyncStorage
-//         await AsyncStorage.setItem('userLoggedIn', 'true');
-//         navigation.replace('Home'); // Redirecionar para a tela principal após o login bem-sucedido
-//       }
-//     } catch (error) {
-//       console.error('Erro ao fazer login:', error);
-//     }
-//   };
-
-//   return (
-//     <SafeAreaView style={styles.container}>
-//       <Text style={styles.txtCadastro}>Login</Text>
-//       <TextInput
-//         style={styles.input1}
-//         placeholder="Usuário"
-//         value={username}
-//         onChangeText={setUsername}
-//       />
-//       <TextInput
-//         style={styles.input2}
-//         placeholder="Senha"
-//         value={password}
-//         onChangeText={setPassword}
-//         secureTextEntry={true}
-//       />
-//       <TouchableOpacity style={styles.enterButton} onPress={handleLogin}>
-//         <Text>Entrar</Text>
-//       </TouchableOpacity>
-//     </SafeAreaView>
-//   );
-// };
-
-import React, { useState, useContext } from 'react';
-import { View, Text, TouchableOpacity, SafeAreaView, StyleSheet, TextInput, Alert } from 'react-native';
-import Parse from 'parse/react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
- // Importe o AsyncStorage
-import ShakingInput from './ShakingInput'; // Importe o componente ShakingInput
-import styles from './estilo';
-import { UserContext } from "./UserContext"
-
-export const Login = () => {
-  const { setUser } = useContext(UserContext);
+const Login = ({navigation}) => {
+  const userContext = useContext(UserContext);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const handleLogin = async () => {
     try {
       const user = await Parse.User.logIn(username, password);
-      // Atualiza o usuário em App.js
-      setUser(user);
+      userContext.setUser(user);
+      userContext.setIsUserLoaded(true);
     } catch (error) {
-      alert("Error!", error.message);
+      console.error('Failed to log in', error);
     }
   };
-
   return (
+    
     <SafeAreaView style={styles.container}>
-<Text style={styles.txtCadastro}>Login</Text>
-        <TextInput
+      <Text style={styles.txtCadastro}>Login</Text>
+      <TextInput
         style={styles.input1}
-        placeholder="Usuário"
+        placeholder="Username"
         value={username}
-        onChangeText={setUsername}
+        onChangeText={text => setUsername(text)}
       />
       <TextInput
         style={styles.input2}
-        placeholder="Senha"
+        placeholder="Password"
         value={password}
-        onChangeText={setPassword}
+        onChangeText={text => setPassword(text)}
         secureTextEntry={true}
       />
       <TouchableOpacity style={styles.enterButton} onPress={handleLogin}>
